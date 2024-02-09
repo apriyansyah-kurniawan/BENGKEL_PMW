@@ -1,0 +1,178 @@
+*,
+
+html{
+        /* untuk agar bisa full screen, agar navbar nya keliatan wide */
+    margin:0;
+    padding:0;
+}
+body {
+    background-color: white;
+}
+.container-navbar{
+    background-color: rgb(80, 80, 80);
+    width: 100%;
+    height: 96px;
+}
+.ul-navbar{
+    display: flex;
+    width: auto;
+    height: 150px;
+    justify-content: right;
+    align-items: center; 
+}
+.logo-img{
+    position: absolute;
+    width: 250px;
+    height: 95px;
+}
+.li-navbar{
+    list-style-type : none;
+    padding: 8px;
+    margin:10px;
+    font-size: 20px;
+   
+}
+.li-navbar:hover{
+    /* hover adalah ketika user mengarahkan cursor ke navbar, ada effect tertentu */
+    background-color: rgb(134, 134, 134);
+    transition: .3s ease-in-out;
+    transition-delay: .1s;
+    /* border-radius: 10px; */
+    /* biar kotak nya agak rounded */
+}
+.a-navbar{
+    color: white;
+    /* agar warna setelah bisa dipencet atau ada a, tidak jadi biru (default) */
+    text-decoration: none;
+    /* none biar gak ada underline */
+    font-weight: 800;
+}
+.icon-img{
+    width: 90%;
+    height: 15%;
+}
+
+.tabelbook{
+    z-index: 1;
+    list-style-type : none;
+    position: absolute;
+    right: 550px;
+    bottom: 400px;
+    font-size: 30px;
+
+}
+
+.isi-gambar{
+    background-size: cover;
+    position: absolute;
+    width: 100%;
+    height: 500px;
+    bottom: 150px;
+
+}
+
+.overlay {
+    position: absolute;
+    top: 95px;
+    left: 0;
+    width: 100%;
+    height: 68%;
+    background-color: rgba(255, 255, 255, 0.5); /* Warna putih transparan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 1;
+}
+
+
+.tabelbook2{
+    z-index: 1;
+    list-style-type : none;
+    position: absolute;
+    right: 450px;
+    bottom: 200px;
+    font-size: 28px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-width: 600px; /* Sesuaikan dengan lebar yang diinginkan */
+    font-style: inherit;
+    
+
+}
+
+.tabelbook3{
+    z-index: 1;
+    list-style-type : none;
+    position: absolute;
+    top: 100px;
+    right: 450px;
+    bottom: 100px;
+    font-size: 20px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-width: 600px; /* Sesuaikan dengan lebar yang diinginkan */
+    font-style: inherit;
+    font-display: rgb(34, 0, 255);
+}
+.overlay2 {
+    position: absolute;
+    top: 400px;
+    left: 300px;
+    width: 60%;
+    height: 30%;
+    background-color: rgba(255, 255, 255, 0.5); /* Warna putih transparan */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 1;
+}
+
+.tabelbook3{
+    z-index: 1;
+    list-style-type : none;
+    position: absolute;
+    top: 25px;
+    right: 1200px;
+    bottom: 100px;
+    font-size: 20px;
+    justify-content: left;
+    align-items: left;
+    text-align: left;
+    font-style: inherit;
+    font-display: rgb(34, 0, 255);
+}
+
+.FOTOB{
+position: fixed;
+  bottom: 10px;
+  right: 10px;
+  height: 80px;
+  width: 250px;;
+
+}
+
+
+/* Footer */
+.footer {
+    position: absolute; /* Mengganti properti position menjadi absolute */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background-color: rgb(80, 80, 80);
+    color: white;
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
+}
+
+.footer p {
+    margin: 0;
+    padding: 0;
+    font-size: 18px; /* Contoh ukuran teks yang lebih kecil *
+}

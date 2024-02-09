@@ -1,0 +1,262 @@
+import random
+import tkinter as tk
+from tkinter import messagebox
+
+MAP_SIZE = 35
+TILE_SIZE = 20
+WALL_THICKNESS = 5
+
+
+class MapPanel(tk.Frame):
+    def __init__(self, master):
+        super().__init__(master)
+        self.master = master
+        self.currentStep = 0
+        self.map = [[True] * MAP_SIZE for _ in range(MAP_SIZE)]
+        self.redDroids = []
+        self.greenDroids = []
+        self.distances = [[float('inf')] * MAP_SIZE for _ in range(MAP_SIZE)]
+        self.parent = [[None] * MAP_SIZE for _ in range(MAP_SIZE)]
+
+        self.mapPanel = tk.Canvas(self, width=MAP_SIZE * TILE_SIZE, height=MAP_SIZE * TILE_SIZE)
+        self.mapPanel.pack()
+
+        shuffleButton = tk.Button(self, text="Shuffle Map", command=self.initializeWalls)
+        shuffleButton.pack(side=tk.LEFT)
+        addRedDroidButton = tk.Button(self, text="Add Red Droid", command=self.addRedDroid)
+        addRedDroidButton.pack(side=tk.LEFT)
+        addGreenDroidButton = tk.Button(self, text="Add Green Droid", command=self.addGreenDroid)
+        addGreenDroidButton.pack(side=tk.LEFT)
+        startGameButton = tk.Button(self, text="Mulai Game", command=self.moveRedDroid)
+        startGameButton.pack(side=tk.LEFT)
+
+        self.pack()
+
+        self.initializeWalls()
+
+    def initializeWalls(self):
+        for i in range(MAP_SIZE):
+            for j in range(MAP_SIZE):
+                self.map[i][j] = True
+
+        startX = 1
+        startY = 1
+        self.createMaze(startX, startY)
+
+        for i in range(1, MAP_SIZE, 2):
+            if self.map[i][1]:
+                self.map[i][0] = False
+            if self.map[i][MAP_SIZE - 2]:
+                self.map[i][MAP_SIZE - 1] = False
+
+        for j in range(1, MAP_SIZE, 2):
+            if self.map[1][j]:
+                self.map[0][j] = False
+            if self.map[MAP_SIZE - 2][j]:
+                self.map[MAP_SIZE - 1][j] = False
+
+        self.redDroids.clear()
+        self.greenDroids.clear()
+        self.mapPanel.delete("all")
+        self.drawMap()
+
+    def createMaze(self, x, y):
+        self.map[x][y] = False
+
+        directions = [0, 1, 2, 3]
+        random.shuffle(directions)
+
+        for direction in directions:
+            newX = x
+            newY = y
+
+            if direction == 0:  # Atas
+                newY -= 2
+            elif direction == 1:  # Kanan
+                newX += 2
+            elif direction == 2:  # Bawah
+                newY += 2
+            elif direction == 3:  # Kiri
+                newX -= 2
+
+            if (
+                0 < newX < MAP_SIZE - 1
+                and 0 < newY < MAP_SIZE - 1
+                and self.map[newX][newY]
+            ):
+                self.map[(newX + x) // 2][(newY + y) // 2] = False
+                self.createMaze(newX, newY)
+
+    def addRedDroid(self):
+        x = random.randint(0, MAP_SIZE - 1)
+.
+
+
+
+
+User
+lanjutkan kode diatas
+ChatGPT
+Tentu! Berikut adalah kelanjutan kode di atas:
+
+python
+Copy code
+        x = random.randint(0, MAP_SIZE - 1)
+        y = random.randint(0, MAP_SIZE - 1)
+
+        while not self.isValidPosition(x, y):
+            x = random.randint(0, MAP_SIZE - 1)
+            y = random.randint(0, MAP_SIZE - 1)
+
+        self.redDroids.append((x, y))
+        self.drawRedDroids()
+
+    def addGreenDroid(self):
+        x = random.randint(0, MAP_SIZE - 1)
+        y = random.randint(0, MAP_SIZE - 1)
+
+        while not self.isValidPosition(x, y) or (x, y) in self.redDroids:
+            x = random.randint(0, MAP_SIZE - 1)
+            y = random.randint(0, MAP_SIZE - 1)
+
+        self.greenDroids.append((x, y))
+        self.drawGreenDroids()
+
+    def isValidPosition(self, x, y):
+        if (
+            0 <= x < MAP_SIZE
+            and 0 <= y < MAP_SIZE
+            and not self.map[x][y]
+            and (x, y) not in self.redDroids
+            and (x, y) not in self.greenDroids
+        ):
+            return True
+        return False
+
+    def drawMap(self):
+        for i in range(MAP_SIZE):
+            for j in range(MAP_SIZE):
+                if self.map[i][j]:
+                    self.mapPanel.create_rectangle(
+                        i * TILE_SIZE,
+                        j * TILE_SIZE,
+                        (i + 1) * TILE_SIZE,
+                        (j + 1) * TILE_SIZE,
+                        fill="black",
+                    )
+
+    def drawRedDroids(self):
+        for droid in self.redDroids:
+            x, y = droid
+            self.mapPanel.create_oval(
+                x * TILE_SIZE,
+                y * TILE_SIZE,
+                (x + 1) * TILE_SIZE,
+                (y + 1) * TILE_SIZE,
+                fill="red",
+            )
+
+    def drawGreenDroids(self):
+        for droid in self.greenDroids:
+            x, y = droid
+            self.mapPanel.create_oval(
+                x * TILE_SIZE,
+                y * TILE_SIZE,
+                (x + 1) * TILE_SIZE,
+                (y + 1) * TILE_SIZE,
+                fill="green",
+            )
+
+    def moveRedDroid(self):
+        if self.currentStep >= len(self.redDroids):
+            messagebox.showinfo("Game Over", "Semua droid merah telah bergerak.")
+            return
+
+        x, y = self.redDroids[self.currentStep]
+        self.mapPanel.create_oval(
+            x * TILE_SIZE + WALL_THICKNESS,
+            y * TILE_SIZE + WALL_THICKNESS,
+            (x + 1) * TILE_SIZE - WALL_THICKNESS,
+            (y + 1) * TILE_SIZE - WALL_THICKNESS,
+            fill="white",
+            outline="red",
+        )
+
+        if (x, y) in self.greenDroids:
+            messagebox.showinfo("Game Over", "Droid merah bertabrakan dengan droid hijau.")
+            return
+
+        self.calculateDistances(x, y)
+        self.moveGreenDroids()
+
+        self.currentStep += 1
+
+    def calculateDistances(self, startX, startY):
+        queue = [(startX, startY)]
+        self.distances[startX][startY] = 0
+
+        while queue:
+            x, y = queue.pop(0)
+
+            if self.distances[x][y] > 3:
+                continue
+
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nx = x + dx
+                ny = y + dy
+
+                if (
+                    0 <= nx < MAP_SIZE
+                    and 0 <= ny < MAP_SIZE
+                    and self.distances[nx][ny] == -1
+                    and not self.map[nx][ny]
+                ):
+                    self.distances[nx][ny] = self.distances[x][y] + 1
+                    queue.append((nx, ny))
+
+    def moveGreenDroids(self):
+        for i in range(len(self.greenDroids)):
+            x, y = self.greenDroids[i]
+            minDistance = float("inf")
+            bestMove = (x, y)
+
+            for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                nx = x + dx
+                ny = y + dy
+
+                if (
+                    0 <= nx < MAP_SIZE
+                    and 0 <= ny < MAP_SIZE
+                    and self.distances[nx][ny] != -1
+                    and self.distances[nx][ny] < minDistance
+                ):
+                    minDistance = self.distances[nx][ny]
+                    bestMove = (nx, ny)
+
+            self.mapPanel.create_oval(
+                x * TILE_SIZE + WALL_THICKNESS,
+                y * TILE_SIZE + WALL_THICKNESS,
+                (x + 1) * TILE_SIZE - WALL_THICKNESS,
+                (y + 1) * TILE_SIZE - WALL_THICKNESS,
+                fill="white",
+                outline="green",
+            )
+
+            self.greenDroids[i] = bestMove
+
+            self.mapPanel.create_oval(
+                bestMove[0] * TILE_SIZE + WALL_THICKNESS,
+                bestMove[1] * TILE_SIZE + WALL_THICKNESS,
+                (bestMove[0] + 1) * TILE_SIZE - WALL_THICKNESS,
+                (bestMove[1] + 1) * TILE_SIZE - WALL_THICKNESS,
+                fill="green",
+            )
+
+        if (self.redDroids[self.currentStep][0], self.redDroids[self.currentStep][1]) in self.greenDroids:
+            messagebox.showinfo("Game Over", "Droid merah berhasil menangkap droid hijau.")
+
+    def startGame(self):
+        self.root.mainloop()
+
+game = DroidGame()
+game.startGame()
